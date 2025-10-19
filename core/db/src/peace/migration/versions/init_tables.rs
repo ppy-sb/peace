@@ -155,6 +155,8 @@ impl MigrationTrait for Migration {
             channel_users::create(),
             channel_privileges::create(),
             chat_messages::create(),
+            scores::create(),
+            scores_classic::create(),
         ];
 
         let create_foreign_key_stmts = vec![
@@ -167,6 +169,8 @@ impl MigrationTrait for Migration {
             channel_users::create_foreign_keys(),
             channel_privileges::create_foreign_keys(),
             chat_messages::create_foreign_keys(),
+            scores::create_foreign_keys(),
+            scores_classic::create_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -184,6 +188,8 @@ impl MigrationTrait for Migration {
             channel_users::create_indexes(),
             channel_privileges::create_indexes(),
             chat_messages::create_indexes(),
+            scores::create_indexes(),
+            scores_classic::create_indexes(),
         ]
         .into_iter()
         .flatten()
@@ -309,6 +315,8 @@ impl MigrationTrait for Migration {
             channel_users::drop(),
             channel_privileges::drop(),
             chat_messages::drop(),
+            scores::drop(),
+            scores_classic::drop(),
         ];
 
         let drop_foreign_key_stmts = vec![
@@ -321,6 +329,8 @@ impl MigrationTrait for Migration {
             channel_users::drop_foreign_keys(),
             channel_privileges::drop_foreign_keys(),
             chat_messages::drop_foreign_keys(),
+            scores::drop_foreign_keys(),
+            scores_classic::drop_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -1786,5 +1796,282 @@ pub mod chat_messages {
             .table(ChatMessages::Table)
             .name(INDEX_CHANNEL_ID)
             .to_owned()]
+    }
+}
+
+pub mod scores {
+    use sea_orm_migration::prelude::*;
+
+    use super::users::Users;
+
+    const FOREIGN_KEY_USER_ID: &str = "FK_scores_user_id";
+    const INDEX_CKSM: &str = "IDX_scores_cksm";
+    const INDEX_USER_ID: &str = "IDX_scores_user_id";
+
+    #[derive(Iden)]
+    pub enum Scores {
+        Table,
+        Id,
+        UserId,
+        MapHash,
+        Cksm,
+        ScoreKind,
+        Invisible,
+        Verified,
+        VerifiedAt,
+        CreatedAt,
+        UpdatedAt,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(Scores::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(Scores::Id)
+                    .big_integer()
+                    .not_null()
+                    .auto_increment()
+                    .primary_key(),
+            )
+            .col(ColumnDef::new(Scores::UserId).integer().not_null())
+            .col(ColumnDef::new(Scores::MapHash).char().char_len(32).not_null())
+            .col(ColumnDef::new(Scores::Cksm).string().not_null().unique_key())
+            .col(ColumnDef::new(Scores::ScoreKind).string().not_null())
+            .col(
+                ColumnDef::new(Scores::Invisible)
+                    .boolean()
+                    .not_null()
+                    .default(false),
+            )
+            .col(
+                ColumnDef::new(Scores::Verified)
+                    .boolean()
+                    .not_null()
+                    .default(false),
+            )
+            .col(
+                ColumnDef::new(Scores::VerifiedAt)
+                    .timestamp_with_time_zone()
+                    .null(),
+            )
+            .col(
+                ColumnDef::new(Scores::CreatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(Scores::UpdatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(Scores::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_USER_ID)
+            .from(Scores::Table, Scores::UserId)
+            .to(Users::Table, Users::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_USER_ID)
+            .table(Scores::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![
+            sea_query::Index::create()
+                .name(INDEX_CKSM)
+                .table(Scores::Table)
+                .col(Scores::Cksm)
+                .unique()
+                .to_owned(),
+            sea_query::Index::create()
+                .name(INDEX_USER_ID)
+                .table(Scores::Table)
+                .col(Scores::UserId)
+                .to_owned(),
+        ]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![
+            sea_query::Index::drop()
+                .table(Scores::Table)
+                .name(INDEX_CKSM)
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Scores::Table)
+                .name(INDEX_USER_ID)
+                .to_owned(),
+        ]
+    }
+}
+
+pub mod scores_classic {
+    use sea_orm_migration::prelude::*;
+
+    use super::scores::Scores;
+
+    const FOREIGN_KEY_SCORES_ID: &str = "FK_scores_classic_scores_id";
+
+    #[derive(Iden)]
+    pub enum ScoresClassic {
+        Table,
+        Id,
+        Mode,
+        ScoreVersion,
+        Score,
+        Accuracy,
+        Combo,
+        Mods,
+        N300,
+        N100,
+        N50,
+        Miss,
+        Geki,
+        Katu,
+        Playtime,
+        Perfect,
+        Status,
+        Grade,
+        ClientFlags,
+        ClientVersion,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(ScoresClassic::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(ScoresClassic::Id)
+                    .big_integer()
+                    .not_null()
+                    .primary_key(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::Mode)
+                    .enumeration(
+                        super::GameMode::Enum,
+                        [
+                            super::GameMode::Standard,
+                            super::GameMode::Taiko,
+                            super::GameMode::Fruits,
+                            super::GameMode::Mania,
+                        ],
+                    )
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ScoreVersion)
+                    .enumeration(
+                        super::ScoreVersion::Enum,
+                        [super::ScoreVersion::V1, super::ScoreVersion::V2],
+                    )
+                    .not_null(),
+            )
+            .col(ColumnDef::new(ScoresClassic::Score).integer().not_null())
+            .col(
+                ColumnDef::new(ScoresClassic::Accuracy)
+                    .decimal()
+                    .decimal_len(6, 2)
+                    .not_null(),
+            )
+            .col(ColumnDef::new(ScoresClassic::Combo).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Mods).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N300).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N100).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N50).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Miss).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Geki).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Katu).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Playtime).integer().not_null())
+            .col(
+                ColumnDef::new(ScoresClassic::Perfect)
+                    .boolean()
+                    .not_null()
+                    .default(false),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::Status)
+                    .enumeration(
+                        super::ScoreStatus::Enum,
+                        [
+                            super::ScoreStatus::Failed,
+                            super::ScoreStatus::Passed,
+                            super::ScoreStatus::High,
+                        ],
+                    )
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::Grade)
+                    .enumeration(
+                        super::ScoreGrade::Enum,
+                        [
+                            super::ScoreGrade::A,
+                            super::ScoreGrade::B,
+                            super::ScoreGrade::C,
+                            super::ScoreGrade::D,
+                            super::ScoreGrade::S,
+                            super::ScoreGrade::SH,
+                            super::ScoreGrade::X,
+                            super::ScoreGrade::XH,
+                            super::ScoreGrade::F,
+                        ],
+                    )
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ClientFlags).integer().not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ClientVersion)
+                    .string()
+                    .not_null(),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(ScoresClassic::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .from(ScoresClassic::Table, ScoresClassic::Id)
+            .to(Scores::Table, Scores::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .table(ScoresClassic::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![]
     }
 }

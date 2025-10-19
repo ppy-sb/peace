@@ -15,6 +15,8 @@ pub mod leaderboard;
 pub mod privileges;
 pub mod score_pp;
 pub mod scores;
+pub mod scores_classic;
+pub mod scores_generic;
 pub mod sea_orm_active_enums;
 pub mod user_pp;
 pub mod user_privileges;

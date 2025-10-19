@@ -13,6 +13,8 @@ pub use super::leaderboard::Entity as Leaderboard;
 pub use super::privileges::Entity as Privileges;
 pub use super::score_pp::Entity as ScorePp;
 pub use super::scores::Entity as Scores;
+pub use super::scores_classic::Entity as ScoresClassic;
+pub use super::scores_generic::Entity as ScoresGeneric;
 pub use super::user_pp::Entity as UserPp;
 pub use super::user_privileges::Entity as UserPrivileges;
 pub use super::user_settings::Entity as UserSettings;
