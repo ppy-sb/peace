@@ -145,6 +145,11 @@ impl MigrationTrait for Migration {
             chat_messages::create(),
             scores::create(),
             scores_classic::create(),
+            scores_generic::create(),
+            leaderboard::create(),
+            score_pp::create(),
+            user_pp::create(),
+            user_stats::create(),
         ];
 
         let create_foreign_key_stmts = vec![
@@ -159,6 +164,11 @@ impl MigrationTrait for Migration {
             chat_messages::create_foreign_keys(),
             scores::create_foreign_keys(),
             scores_classic::create_foreign_keys(),
+            scores_generic::create_foreign_keys(),
+            leaderboard::create_foreign_keys(),
+            score_pp::create_foreign_keys(),
+            user_pp::create_foreign_keys(),
+            user_stats::create_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -178,6 +188,11 @@ impl MigrationTrait for Migration {
             chat_messages::create_indexes(),
             scores::create_indexes(),
             scores_classic::create_indexes(),
+            scores_generic::create_indexes(),
+            leaderboard::create_indexes(),
+            score_pp::create_indexes(),
+            user_pp::create_indexes(),
+            user_stats::create_indexes(),
         ]
         .into_iter()
         .flatten()
@@ -297,6 +312,11 @@ impl MigrationTrait for Migration {
             chat_messages::drop(),
             scores::drop(),
             scores_classic::drop(),
+            scores_generic::drop(),
+            leaderboard::drop(),
+            score_pp::drop(),
+            user_pp::drop(),
+            user_stats::drop(),
         ];
 
         let drop_foreign_key_stmts = vec![
@@ -311,6 +331,11 @@ impl MigrationTrait for Migration {
             chat_messages::drop_foreign_keys(),
             scores::drop_foreign_keys(),
             scores_classic::drop_foreign_keys(),
+            scores_generic::drop_foreign_keys(),
+            leaderboard::drop_foreign_keys(),
+            score_pp::drop_foreign_keys(),
+            user_pp::drop_foreign_keys(),
+            user_stats::drop_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -330,6 +355,11 @@ impl MigrationTrait for Migration {
             chat_messages::drop_indexes(),
             scores::drop_indexes(),
             scores_classic::drop_indexes(),
+            scores_generic::drop_indexes(),
+            leaderboard::drop_indexes(),
+            score_pp::drop_indexes(),
+            user_pp::drop_indexes(),
+            user_stats::drop_indexes(),
         ]
         .into_iter()
         .flatten()
@@ -2060,6 +2090,7 @@ pub mod scores_generic {
                     .not_null()
                     .primary_key(),
             )
+            .col(ColumnDef::new(ScoreGeneric::Mode).string().not_null())
             .col(ColumnDef::new(ScoreGeneric::JSON).json().not_null())
             .to_owned()
     }
@@ -2081,7 +2112,395 @@ pub mod scores_generic {
     pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
         vec![sea_query::ForeignKey::drop()
             .name(FOREIGN_KEY_SCORES_ID)
-            .table(ScoresClassic::Table)
+            .table(ScoreGeneric::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![]
+    }
+}
+
+pub mod leaderboard {
+    use sea_orm_migration::prelude::*;
+
+    use super::{beatmaps::Beatmaps, scores::Scores, users::Users};
+
+    const FOREIGN_KEY_BEATMAP_ID: &str = "FK_leaderboard_beatmap_id";
+    const FOREIGN_KEY_SCORE_ID: &str = "FK_leaderboard_score_id";
+    const FOREIGN_KEY_USER_ID: &str = "FK_leaderboard_user_id";
+
+    #[derive(Iden)]
+    pub enum Leaderboard {
+        Table,
+        BeatmapId,
+        Mode,
+        RankingType,
+        UserId,
+        ScoreId,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(Leaderboard::Table)
+            .if_not_exists()
+            .col(ColumnDef::new(Leaderboard::BeatmapId).integer().not_null())
+            .col(ColumnDef::new(Leaderboard::Mode).string().not_null())
+            .col(ColumnDef::new(Leaderboard::RankingType).string().not_null())
+            .col(ColumnDef::new(Leaderboard::UserId).integer().not_null())
+            .col(ColumnDef::new(Leaderboard::ScoreId).big_integer().not_null())
+            .primary_key(
+                sea_query::Index::create()
+                    .col(Leaderboard::BeatmapId)
+                    .col(Leaderboard::Mode)
+                    .col(Leaderboard::RankingType),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(Leaderboard::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![
+            sea_query::ForeignKey::create()
+                .name(FOREIGN_KEY_BEATMAP_ID)
+                .from(Leaderboard::Table, Leaderboard::BeatmapId)
+                .to(Beatmaps::Table, Beatmaps::Bid)
+                .on_delete(ForeignKeyAction::Cascade)
+                .on_update(ForeignKeyAction::Cascade)
+                .to_owned(),
+            sea_query::ForeignKey::create()
+                .name(FOREIGN_KEY_SCORE_ID)
+                .from(Leaderboard::Table, Leaderboard::ScoreId)
+                .to(Scores::Table, Scores::Id)
+                .on_delete(ForeignKeyAction::Cascade)
+                .on_update(ForeignKeyAction::Cascade)
+                .to_owned(),
+            sea_query::ForeignKey::create()
+                .name(FOREIGN_KEY_USER_ID)
+                .from(Leaderboard::Table, Leaderboard::UserId)
+                .to(Users::Table, Users::Id)
+                .on_delete(ForeignKeyAction::Cascade)
+                .on_update(ForeignKeyAction::Cascade)
+                .to_owned(),
+        ]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![
+            sea_query::ForeignKey::drop()
+                .name(FOREIGN_KEY_BEATMAP_ID)
+                .table(Leaderboard::Table)
+                .to_owned(),
+            sea_query::ForeignKey::drop()
+                .name(FOREIGN_KEY_SCORE_ID)
+                .table(Leaderboard::Table)
+                .to_owned(),
+            sea_query::ForeignKey::drop()
+                .name(FOREIGN_KEY_USER_ID)
+                .table(Leaderboard::Table)
+                .to_owned(),
+        ]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![
+            sea_query::Index::create()
+                .name("IDX_leaderboard_beatmap_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::BeatmapId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_user_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::UserId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_score_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::ScoreId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_mode_ranking")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::Mode)
+                .col(Leaderboard::RankingType)
+                .to_owned(),
+        ]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_beatmap_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_user_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_score_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_mode_ranking")
+                .to_owned(),
+        ]
+    }
+}
+
+pub mod score_pp {
+    use sea_orm_migration::prelude::*;
+
+    use super::scores::Scores;
+
+    const FOREIGN_KEY_SCORES_ID: &str = "FK_score_pp_scores_id";
+
+    #[derive(Iden)]
+    pub enum ScorePp {
+        Table,
+        ScoreId,
+        Mode,
+        PpVersion,
+        Pp,
+        RawPp,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(ScorePp::Table)
+            .if_not_exists()
+            .col(ColumnDef::new(ScorePp::ScoreId).big_integer().not_null())
+            .col(ColumnDef::new(ScorePp::Mode).string().not_null())
+            .col(ColumnDef::new(ScorePp::PpVersion).string().not_null())
+            .col(
+                ColumnDef::new(ScorePp::Pp)
+                    .decimal()
+                    .decimal_len(16, 2)
+                    .not_null(),
+            )
+            .col(ColumnDef::new(ScorePp::RawPp).json().null())
+            .primary_key(
+                sea_query::Index::create()
+                    .col(ScorePp::ScoreId)
+                    .col(ScorePp::Mode)
+                    .col(ScorePp::PpVersion),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(ScorePp::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .from(ScorePp::Table, ScorePp::ScoreId)
+            .to(Scores::Table, Scores::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .table(ScorePp::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![sea_query::Index::create()
+            .name("IDX_score_pp_score_id")
+            .table(ScorePp::Table)
+            .col(ScorePp::ScoreId)
+            .to_owned()]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![sea_query::Index::drop()
+            .table(ScorePp::Table)
+            .name("IDX_score_pp_score_id")
+            .to_owned()]
+    }
+}
+
+pub mod user_pp {
+    use sea_orm_migration::prelude::*;
+
+    use super::users::Users;
+
+    const FOREIGN_KEY_USER_ID: &str = "FK_user_pp_user_id";
+
+    #[derive(Iden)]
+    pub enum UserPp {
+        Table,
+        UserId,
+        Mode,
+        PpVersion,
+        Pp,
+        RawPp,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(UserPp::Table)
+            .if_not_exists()
+            .col(ColumnDef::new(UserPp::UserId).integer().not_null())
+            .col(ColumnDef::new(UserPp::Mode).string().not_null())
+            .col(ColumnDef::new(UserPp::PpVersion).string().not_null())
+            .col(
+                ColumnDef::new(UserPp::Pp)
+                    .decimal()
+                    .decimal_len(16, 2)
+                    .not_null(),
+            )
+            .col(ColumnDef::new(UserPp::RawPp).json().null())
+            .primary_key(
+                sea_query::Index::create()
+                    .col(UserPp::UserId)
+                    .col(UserPp::Mode)
+                    .col(UserPp::PpVersion),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(UserPp::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_USER_ID)
+            .from(UserPp::Table, UserPp::UserId)
+            .to(Users::Table, Users::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_USER_ID)
+            .table(UserPp::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![sea_query::Index::create()
+            .name("IDX_user_pp_user_id")
+            .table(Users::Table)
+            .col(Users::Id)
+            .to_owned()]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![sea_query::Index::drop()
+            .table(Users::Table)
+            .name("IDX_user_pp_user_id")
+            .to_owned()]
+    }
+}
+
+pub mod user_stats {
+    use sea_orm_migration::prelude::*;
+
+    use super::users::Users;
+
+    const FOREIGN_KEY_USER_ID: &str = "FK_user_stats_user_id";
+
+    #[derive(Iden)]
+    pub enum UserStats {
+        Table,
+        UserId,
+        Mode,
+        TotalScore,
+        RankedScore,
+        Playcount,
+        TotalHits,
+        Accuracy,
+        MaxCombo,
+        TotalSecondsPlayed,
+        Count300,
+        Count100,
+        Count50,
+        CountMiss,
+        CountFailed,
+        CountQuit,
+        UpdatedAt,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(UserStats::Table)
+            .if_not_exists()
+            .col(ColumnDef::new(UserStats::UserId).integer().not_null())
+            .col(ColumnDef::new(UserStats::Mode).string().not_null())
+            .col(ColumnDef::new(UserStats::TotalScore).big_integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::RankedScore).big_integer().not_null(),
+            )
+            .col(ColumnDef::new(UserStats::Playcount).integer().not_null())
+            .col(ColumnDef::new(UserStats::TotalHits).integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::Accuracy)
+                    .decimal()
+                    .decimal_len(6, 2)
+                    .not_null(),
+            )
+            .col(ColumnDef::new(UserStats::MaxCombo).integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::TotalSecondsPlayed)
+                    .integer()
+                    .not_null(),
+            )
+            .col(ColumnDef::new(UserStats::Count300).integer().not_null())
+            .col(ColumnDef::new(UserStats::Count100).integer().not_null())
+            .col(ColumnDef::new(UserStats::Count50).integer().not_null())
+            .col(ColumnDef::new(UserStats::CountMiss).integer().not_null())
+            .col(ColumnDef::new(UserStats::CountFailed).integer().not_null())
+            .col(ColumnDef::new(UserStats::CountQuit).integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::UpdatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .primary_key(
+                sea_query::Index::create()
+                    .col(UserStats::UserId)
+                    .col(UserStats::Mode),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(UserStats::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_USER_ID)
+            .from(UserStats::Table, UserStats::UserId)
+            .to(Users::Table, Users::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_USER_ID)
+            .table(UserStats::Table)
             .to_owned()]
     }
 
