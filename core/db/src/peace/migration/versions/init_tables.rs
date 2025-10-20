@@ -348,6 +348,8 @@ impl MigrationTrait for Migration {
             channel_users::drop_indexes(),
             channel_privileges::drop_indexes(),
             chat_messages::drop_indexes(),
+            scores::drop_indexes(),
+            scores_classic::drop_indexes(),
         ]
         .into_iter()
         .flatten()
