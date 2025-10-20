@@ -1,4 +1,4 @@
-//! Extended `scores_classic` entity holding classic-mode-specific score fields.
+//! `scores_generic` entity holding generic-mode-specific score fields.
 
 use sea_orm::entity::prelude::*;
 
