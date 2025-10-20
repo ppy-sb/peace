@@ -2210,11 +2210,50 @@ pub mod leaderboard {
     }
 
     pub fn create_indexes() -> Vec<IndexCreateStatement> {
-        vec![]
+        vec![
+            sea_query::Index::create()
+                .name("IDX_leaderboard_beatmap_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::BeatmapId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_user_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::UserId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_score_id")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::ScoreId)
+                .to_owned(),
+            sea_query::Index::create()
+                .name("IDX_leaderboard_mode_ranking")
+                .table(Leaderboard::Table)
+                .col(Leaderboard::Mode)
+                .col(Leaderboard::RankingType)
+                .to_owned(),
+        ]
     }
 
     pub fn drop_indexes() -> Vec<IndexDropStatement> {
-        vec![]
+        vec![
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_beatmap_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_user_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_score_id")
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Leaderboard::Table)
+                .name("IDX_leaderboard_mode_ranking")
+                .to_owned(),
+        ]
     }
 }
 
@@ -2242,9 +2281,19 @@ pub mod score_pp {
             .col(ColumnDef::new(ScorePp::ScoreId).big_integer().not_null())
             .col(ColumnDef::new(ScorePp::Mode).string().not_null())
             .col(ColumnDef::new(ScorePp::PpVersion).string().not_null())
-            .col(ColumnDef::new(ScorePp::Pp).decimal().decimal_len(16, 2).not_null())
+            .col(
+                ColumnDef::new(ScorePp::Pp)
+                    .decimal()
+                    .decimal_len(16, 2)
+                    .not_null(),
+            )
             .col(ColumnDef::new(ScorePp::RawPp).json().null())
-            .primary_key(sea_query::Index::create().col(ScorePp::ScoreId).col(ScorePp::Mode).col(ScorePp::PpVersion))
+            .primary_key(
+                sea_query::Index::create()
+                    .col(ScorePp::ScoreId)
+                    .col(ScorePp::Mode)
+                    .col(ScorePp::PpVersion),
+            )
             .to_owned()
     }
 
@@ -2270,11 +2319,18 @@ pub mod score_pp {
     }
 
     pub fn create_indexes() -> Vec<IndexCreateStatement> {
-        vec![]
+        vec![sea_query::Index::create()
+            .name("IDX_score_pp_score_id")
+            .table(ScorePp::Table)
+            .col(ScorePp::ScoreId)
+            .to_owned()]
     }
 
     pub fn drop_indexes() -> Vec<IndexDropStatement> {
-        vec![]
+        vec![sea_query::Index::drop()
+            .table(ScorePp::Table)
+            .name("IDX_score_pp_score_id")
+            .to_owned()]
     }
 }
 
@@ -2302,9 +2358,19 @@ pub mod user_pp {
             .col(ColumnDef::new(UserPp::UserId).integer().not_null())
             .col(ColumnDef::new(UserPp::Mode).string().not_null())
             .col(ColumnDef::new(UserPp::PpVersion).string().not_null())
-            .col(ColumnDef::new(UserPp::Pp).decimal().decimal_len(16, 2).not_null())
+            .col(
+                ColumnDef::new(UserPp::Pp)
+                    .decimal()
+                    .decimal_len(16, 2)
+                    .not_null(),
+            )
             .col(ColumnDef::new(UserPp::RawPp).json().null())
-            .primary_key(sea_query::Index::create().col(UserPp::UserId).col(UserPp::Mode).col(UserPp::PpVersion))
+            .primary_key(
+                sea_query::Index::create()
+                    .col(UserPp::UserId)
+                    .col(UserPp::Mode)
+                    .col(UserPp::PpVersion),
+            )
             .to_owned()
     }
 
@@ -2330,11 +2396,18 @@ pub mod user_pp {
     }
 
     pub fn create_indexes() -> Vec<IndexCreateStatement> {
-        vec![]
+        vec![sea_query::Index::create()
+            .name("IDX_user_pp_user_id")
+            .table(Users::Table)
+            .col(Users::Id)
+            .to_owned()]
     }
 
     pub fn drop_indexes() -> Vec<IndexDropStatement> {
-        vec![]
+        vec![sea_query::Index::drop()
+            .table(Users::Table)
+            .name("IDX_user_pp_user_id")
+            .to_owned()]
     }
 }
 
@@ -2373,20 +2446,40 @@ pub mod user_stats {
             .col(ColumnDef::new(UserStats::UserId).integer().not_null())
             .col(ColumnDef::new(UserStats::Mode).string().not_null())
             .col(ColumnDef::new(UserStats::TotalScore).big_integer().not_null())
-            .col(ColumnDef::new(UserStats::RankedScore).big_integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::RankedScore).big_integer().not_null(),
+            )
             .col(ColumnDef::new(UserStats::Playcount).integer().not_null())
             .col(ColumnDef::new(UserStats::TotalHits).integer().not_null())
-            .col(ColumnDef::new(UserStats::Accuracy).decimal().decimal_len(6, 2).not_null())
+            .col(
+                ColumnDef::new(UserStats::Accuracy)
+                    .decimal()
+                    .decimal_len(6, 2)
+                    .not_null(),
+            )
             .col(ColumnDef::new(UserStats::MaxCombo).integer().not_null())
-            .col(ColumnDef::new(UserStats::TotalSecondsPlayed).integer().not_null())
+            .col(
+                ColumnDef::new(UserStats::TotalSecondsPlayed)
+                    .integer()
+                    .not_null(),
+            )
             .col(ColumnDef::new(UserStats::Count300).integer().not_null())
             .col(ColumnDef::new(UserStats::Count100).integer().not_null())
             .col(ColumnDef::new(UserStats::Count50).integer().not_null())
             .col(ColumnDef::new(UserStats::CountMiss).integer().not_null())
             .col(ColumnDef::new(UserStats::CountFailed).integer().not_null())
             .col(ColumnDef::new(UserStats::CountQuit).integer().not_null())
-            .col(ColumnDef::new(UserStats::UpdatedAt).timestamp_with_time_zone().default(Expr::current_timestamp()).not_null())
-            .primary_key(sea_query::Index::create().col(UserStats::UserId).col(UserStats::Mode))
+            .col(
+                ColumnDef::new(UserStats::UpdatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .primary_key(
+                sea_query::Index::create()
+                    .col(UserStats::UserId)
+                    .col(UserStats::Mode),
+            )
             .to_owned()
     }
 
