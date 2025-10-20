@@ -31,74 +31,16 @@ pub enum Relation {
     ChatMessages,
     #[sea_orm(has_many = "super::favourite_beatmaps::Entity")]
     FavouriteBeatmaps,
-    #[sea_orm(has_many = "super::leaderboard_fruits::Entity")]
-    LeaderboardFruits,
-    #[sea_orm(has_many = "super::leaderboard_fruits_relax::Entity")]
-    LeaderboardFruitsRelax,
-    #[sea_orm(has_many = "super::leaderboard_mania::Entity")]
-    LeaderboardMania,
-    #[sea_orm(has_many = "super::leaderboard_standard::Entity")]
-    LeaderboardStandard,
-    #[sea_orm(has_many = "super::leaderboard_standard_autopilot::Entity")]
-    LeaderboardStandardAutopilot,
-    #[sea_orm(has_many = "super::leaderboard_standard_relax::Entity")]
-    LeaderboardStandardRelax,
-    #[sea_orm(has_many = "super::leaderboard_taiko::Entity")]
-    LeaderboardTaiko,
-    #[sea_orm(has_many = "super::leaderboard_taiko_relax::Entity")]
-    LeaderboardTaikoRelax,
-    #[sea_orm(has_many = "super::scores_fruits::Entity")]
-    ScoresFruits,
-    #[sea_orm(has_many = "super::scores_fruits_relax::Entity")]
-    ScoresFruitsRelax,
-    #[sea_orm(has_many = "super::scores_mania::Entity")]
-    ScoresMania,
-    #[sea_orm(has_many = "super::scores_standard::Entity")]
-    ScoresStandard,
-    #[sea_orm(has_many = "super::scores_standard_autopilot::Entity")]
-    ScoresStandardAutopilot,
-    #[sea_orm(has_many = "super::scores_standard_relax::Entity")]
-    ScoresStandardRelax,
-    #[sea_orm(has_many = "super::scores_taiko::Entity")]
-    ScoresTaiko,
-    #[sea_orm(has_many = "super::scores_taiko_relax::Entity")]
-    ScoresTaikoRelax,
-    #[sea_orm(has_many = "super::user_pp_fruits::Entity")]
-    UserPpFruits,
-    #[sea_orm(has_many = "super::user_pp_fruits_relax::Entity")]
-    UserPpFruitsRelax,
-    #[sea_orm(has_many = "super::user_pp_mania::Entity")]
-    UserPpMania,
-    #[sea_orm(has_many = "super::user_pp_standard::Entity")]
-    UserPpStandard,
-    #[sea_orm(has_many = "super::user_pp_standard_autopilot::Entity")]
-    UserPpStandardAutopilot,
-    #[sea_orm(has_many = "super::user_pp_standard_relax::Entity")]
-    UserPpStandardRelax,
-    #[sea_orm(has_many = "super::user_pp_taiko::Entity")]
-    UserPpTaiko,
-    #[sea_orm(has_many = "super::user_pp_taiko_relax::Entity")]
-    UserPpTaikoRelax,
+    #[sea_orm(has_many = "super::leaderboard::Entity")]
+    Leaderboard,
+    #[sea_orm(has_many = "super::scores::Entity")]
+    Scores,
+    #[sea_orm(has_many = "super::user_pp::Entity")]
+    UserPp,
     #[sea_orm(has_many = "super::user_settings::Entity")]
     UserSettings,
-    #[sea_orm(has_many = "super::user_stats_fruits::Entity")]
-    UserStatsFruits,
-    #[sea_orm(has_many = "super::user_stats_fruits_relax::Entity")]
-    UserStatsFruitsRelax,
-    #[sea_orm(has_many = "super::user_stats_mania::Entity")]
-    UserStatsMania,
-    #[sea_orm(has_many = "super::user_stats_standard::Entity")]
-    UserStatsStandard,
-    #[sea_orm(has_many = "super::user_stats_standard_autopilot::Entity")]
-    UserStatsStandardAutopilot,
-    #[sea_orm(has_many = "super::user_stats_standard_relax::Entity")]
-    UserStatsStandardRelax,
-    #[sea_orm(has_many = "super::user_stats_standard_score_v2::Entity")]
-    UserStatsStandardScoreV2,
-    #[sea_orm(has_many = "super::user_stats_taiko::Entity")]
-    UserStatsTaiko,
-    #[sea_orm(has_many = "super::user_stats_taiko_relax::Entity")]
-    UserStatsTaikoRelax,
+    #[sea_orm(has_many = "super::user_stats::Entity")]
+    UserStats,
 }
 
 impl Related<super::bancho_client_hardware_records::Entity> for Entity {
@@ -119,147 +61,21 @@ impl Related<super::favourite_beatmaps::Entity> for Entity {
     }
 }
 
-impl Related<super::leaderboard_fruits::Entity> for Entity {
+impl Related<super::leaderboard::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::LeaderboardFruits.def()
+        Relation::Leaderboard.def()
     }
 }
 
-impl Related<super::leaderboard_fruits_relax::Entity> for Entity {
+impl Related<super::scores::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::LeaderboardFruitsRelax.def()
+        Relation::Scores.def()
     }
 }
 
-impl Related<super::leaderboard_mania::Entity> for Entity {
+impl Related<super::user_pp::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::LeaderboardMania.def()
-    }
-}
-
-impl Related<super::leaderboard_standard::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::LeaderboardStandard.def()
-    }
-}
-
-impl Related<super::leaderboard_standard_autopilot::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::LeaderboardStandardAutopilot.def()
-    }
-}
-
-impl Related<super::leaderboard_standard_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::LeaderboardStandardRelax.def()
-    }
-}
-
-impl Related<super::leaderboard_taiko::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::LeaderboardTaiko.def()
-    }
-}
-
-impl Related<super::leaderboard_taiko_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::LeaderboardTaikoRelax.def()
-    }
-}
-
-impl Related<super::scores_fruits::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresFruits.def()
-    }
-}
-
-impl Related<super::scores_fruits_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresFruitsRelax.def()
-    }
-}
-
-impl Related<super::scores_mania::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresMania.def()
-    }
-}
-
-impl Related<super::scores_standard::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresStandard.def()
-    }
-}
-
-impl Related<super::scores_standard_autopilot::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresStandardAutopilot.def()
-    }
-}
-
-impl Related<super::scores_standard_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresStandardRelax.def()
-    }
-}
-
-impl Related<super::scores_taiko::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresTaiko.def()
-    }
-}
-
-impl Related<super::scores_taiko_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::ScoresTaikoRelax.def()
-    }
-}
-
-impl Related<super::user_pp_fruits::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpFruits.def()
-    }
-}
-
-impl Related<super::user_pp_fruits_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpFruitsRelax.def()
-    }
-}
-
-impl Related<super::user_pp_mania::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpMania.def()
-    }
-}
-
-impl Related<super::user_pp_standard::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpStandard.def()
-    }
-}
-
-impl Related<super::user_pp_standard_autopilot::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpStandardAutopilot.def()
-    }
-}
-
-impl Related<super::user_pp_standard_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpStandardRelax.def()
-    }
-}
-
-impl Related<super::user_pp_taiko::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpTaiko.def()
-    }
-}
-
-impl Related<super::user_pp_taiko_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserPpTaikoRelax.def()
+        Relation::UserPp.def()
     }
 }
 
@@ -269,57 +85,9 @@ impl Related<super::user_settings::Entity> for Entity {
     }
 }
 
-impl Related<super::user_stats_fruits::Entity> for Entity {
+impl Related<super::user_stats::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::UserStatsFruits.def()
-    }
-}
-
-impl Related<super::user_stats_fruits_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsFruitsRelax.def()
-    }
-}
-
-impl Related<super::user_stats_mania::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsMania.def()
-    }
-}
-
-impl Related<super::user_stats_standard::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsStandard.def()
-    }
-}
-
-impl Related<super::user_stats_standard_autopilot::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsStandardAutopilot.def()
-    }
-}
-
-impl Related<super::user_stats_standard_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsStandardRelax.def()
-    }
-}
-
-impl Related<super::user_stats_standard_score_v2::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsStandardScoreV2.def()
-    }
-}
-
-impl Related<super::user_stats_taiko::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsTaiko.def()
-    }
-}
-
-impl Related<super::user_stats_taiko_relax::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::UserStatsTaikoRelax.def()
+        Relation::UserStats.def()
     }
 }
 

@@ -16,18 +16,6 @@ pub enum GameMode {
 }
 
 #[derive(Iden)]
-pub enum ScoreStatus {
-    #[iden = "score_status"]
-    Enum = -1,
-    #[iden = "Failed"]
-    Failed = 0,
-    #[iden = "Passed"]
-    Passed = 1,
-    #[iden = "High"]
-    High = 2,
-}
-
-#[derive(Iden)]
 enum ScoreGrade {
     #[iden = "score_grade"]
     Enum = -1,
@@ -151,51 +139,12 @@ impl MigrationTrait for Migration {
             user_settings::create(),
             beatmaps::create(),
             beatmap_ratings::create(),
-            scores_standard::create(),
-            scores_taiko::create(),
-            scores_fruits::create(),
-            scores_mania::create(),
-            scores_standard_relax::create(),
-            scores_standard_autopilot::create(),
-            scores_taiko_relax::create(),
-            scores_fruits_relax::create(),
-            score_pp_standard::create(),
-            score_pp_taiko::create(),
-            score_pp_fruits::create(),
-            score_pp_mania::create(),
-            score_pp_standard_relax::create(),
-            score_pp_standard_autopilot::create(),
-            score_pp_taiko_relax::create(),
-            score_pp_fruits_relax::create(),
-            user_stats_standard::create(),
-            user_stats_standard_score_v2::create(),
-            user_stats_taiko::create(),
-            user_stats_fruits::create(),
-            user_stats_mania::create(),
-            user_stats_standard_relax::create(),
-            user_stats_standard_autopilot::create(),
-            user_stats_taiko_relax::create(),
-            user_stats_fruits_relax::create(),
-            user_pp_standard::create(),
-            user_pp_taiko::create(),
-            user_pp_fruits::create(),
-            user_pp_mania::create(),
-            user_pp_standard_relax::create(),
-            user_pp_standard_autopilot::create(),
-            user_pp_taiko_relax::create(),
-            user_pp_fruits_relax::create(),
-            leaderboard_standard::create(),
-            leaderboard_taiko::create(),
-            leaderboard_fruits::create(),
-            leaderboard_mania::create(),
-            leaderboard_standard_relax::create(),
-            leaderboard_standard_autopilot::create(),
-            leaderboard_taiko_relax::create(),
-            leaderboard_fruits_relax::create(),
             channels::create(),
             channel_users::create(),
             channel_privileges::create(),
             chat_messages::create(),
+            scores::create(),
+            scores_classic::create(),
         ];
 
         let create_foreign_key_stmts = vec![
@@ -205,50 +154,11 @@ impl MigrationTrait for Migration {
             followers::create_foreign_keys(),
             user_settings::create_foreign_keys(),
             beatmap_ratings::create_foreign_keys(),
-            scores_standard::create_foreign_keys(),
-            scores_taiko::create_foreign_keys(),
-            scores_fruits::create_foreign_keys(),
-            scores_mania::create_foreign_keys(),
-            scores_standard_relax::create_foreign_keys(),
-            scores_standard_autopilot::create_foreign_keys(),
-            scores_taiko_relax::create_foreign_keys(),
-            scores_fruits_relax::create_foreign_keys(),
-            score_pp_standard::create_foreign_keys(),
-            score_pp_taiko::create_foreign_keys(),
-            score_pp_fruits::create_foreign_keys(),
-            score_pp_mania::create_foreign_keys(),
-            score_pp_standard_relax::create_foreign_keys(),
-            score_pp_standard_autopilot::create_foreign_keys(),
-            score_pp_taiko_relax::create_foreign_keys(),
-            score_pp_fruits_relax::create_foreign_keys(),
-            user_stats_standard::create_foreign_keys(),
-            user_stats_standard_score_v2::create_foreign_keys(),
-            user_stats_taiko::create_foreign_keys(),
-            user_stats_fruits::create_foreign_keys(),
-            user_stats_mania::create_foreign_keys(),
-            user_stats_standard_relax::create_foreign_keys(),
-            user_stats_standard_autopilot::create_foreign_keys(),
-            user_stats_taiko_relax::create_foreign_keys(),
-            user_stats_fruits_relax::create_foreign_keys(),
-            user_pp_standard::create_foreign_keys(),
-            user_pp_taiko::create_foreign_keys(),
-            user_pp_fruits::create_foreign_keys(),
-            user_pp_mania::create_foreign_keys(),
-            user_pp_standard_relax::create_foreign_keys(),
-            user_pp_standard_autopilot::create_foreign_keys(),
-            user_pp_taiko_relax::create_foreign_keys(),
-            user_pp_fruits_relax::create_foreign_keys(),
-            leaderboard_standard::create_foreign_keys(),
-            leaderboard_taiko::create_foreign_keys(),
-            leaderboard_fruits::create_foreign_keys(),
-            leaderboard_mania::create_foreign_keys(),
-            leaderboard_standard_relax::create_foreign_keys(),
-            leaderboard_standard_autopilot::create_foreign_keys(),
-            leaderboard_taiko_relax::create_foreign_keys(),
-            leaderboard_fruits_relax::create_foreign_keys(),
             channel_users::create_foreign_keys(),
             channel_privileges::create_foreign_keys(),
             chat_messages::create_foreign_keys(),
+            scores::create_foreign_keys(),
+            scores_classic::create_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -262,42 +172,12 @@ impl MigrationTrait for Migration {
             followers::create_indexes(),
             beatmaps::create_indexes(),
             beatmap_ratings::create_indexes(),
-            scores_standard::create_indexes(),
-            scores_taiko::create_indexes(),
-            scores_fruits::create_indexes(),
-            scores_mania::create_indexes(),
-            scores_standard_relax::create_indexes(),
-            scores_standard_autopilot::create_indexes(),
-            scores_taiko_relax::create_indexes(),
-            scores_fruits_relax::create_indexes(),
-            score_pp_standard::create_indexes(),
-            score_pp_taiko::create_indexes(),
-            score_pp_fruits::create_indexes(),
-            score_pp_mania::create_indexes(),
-            score_pp_standard_relax::create_indexes(),
-            score_pp_standard_autopilot::create_indexes(),
-            score_pp_taiko_relax::create_indexes(),
-            score_pp_fruits_relax::create_indexes(),
-            user_pp_standard::create_indexes(),
-            user_pp_taiko::create_indexes(),
-            user_pp_fruits::create_indexes(),
-            user_pp_mania::create_indexes(),
-            user_pp_standard_relax::create_indexes(),
-            user_pp_standard_autopilot::create_indexes(),
-            user_pp_taiko_relax::create_indexes(),
-            user_pp_fruits_relax::create_indexes(),
-            leaderboard_standard::create_indexes(),
-            leaderboard_taiko::create_indexes(),
-            leaderboard_fruits::create_indexes(),
-            leaderboard_mania::create_indexes(),
-            leaderboard_standard_relax::create_indexes(),
-            leaderboard_standard_autopilot::create_indexes(),
-            leaderboard_taiko_relax::create_indexes(),
-            leaderboard_fruits_relax::create_indexes(),
             channels::create_indexes(),
             channel_users::create_indexes(),
             channel_privileges::create_indexes(),
             chat_messages::create_indexes(),
+            scores::create_indexes(),
+            scores_classic::create_indexes(),
         ]
         .into_iter()
         .flatten()
@@ -323,14 +203,6 @@ impl MigrationTrait for Migration {
                     GameMode::Taiko,
                     GameMode::Fruits,
                     GameMode::Mania,
-                ])
-                .to_owned(),
-            extension::postgres::Type::create()
-                .as_enum(ScoreStatus::Enum)
-                .values([
-                    ScoreStatus::Failed,
-                    ScoreStatus::Passed,
-                    ScoreStatus::High,
                 ])
                 .to_owned(),
             extension::postgres::Type::create()
@@ -419,51 +291,12 @@ impl MigrationTrait for Migration {
             user_settings::drop(),
             beatmaps::drop(),
             beatmap_ratings::drop(),
-            scores_standard::drop(),
-            scores_taiko::drop(),
-            scores_fruits::drop(),
-            scores_mania::drop(),
-            scores_standard_relax::drop(),
-            scores_standard_autopilot::drop(),
-            scores_taiko_relax::drop(),
-            scores_fruits_relax::drop(),
-            score_pp_standard::drop(),
-            score_pp_taiko::drop(),
-            score_pp_fruits::drop(),
-            score_pp_mania::drop(),
-            score_pp_standard_relax::drop(),
-            score_pp_standard_autopilot::drop(),
-            score_pp_taiko_relax::drop(),
-            score_pp_fruits_relax::drop(),
-            user_stats_standard::drop(),
-            user_stats_standard_score_v2::drop(),
-            user_stats_taiko::drop(),
-            user_stats_fruits::drop(),
-            user_stats_mania::drop(),
-            user_stats_standard_relax::drop(),
-            user_stats_standard_autopilot::drop(),
-            user_stats_taiko_relax::drop(),
-            user_stats_fruits_relax::drop(),
-            user_pp_standard::drop(),
-            user_pp_taiko::drop(),
-            user_pp_fruits::drop(),
-            user_pp_mania::drop(),
-            user_pp_standard_relax::drop(),
-            user_pp_standard_autopilot::drop(),
-            user_pp_taiko_relax::drop(),
-            user_pp_fruits_relax::drop(),
-            leaderboard_standard::drop(),
-            leaderboard_taiko::drop(),
-            leaderboard_fruits::drop(),
-            leaderboard_mania::drop(),
-            leaderboard_standard_relax::drop(),
-            leaderboard_standard_autopilot::drop(),
-            leaderboard_taiko_relax::drop(),
-            leaderboard_fruits_relax::drop(),
             channels::drop(),
             channel_users::drop(),
             channel_privileges::drop(),
             chat_messages::drop(),
+            scores::drop(),
+            scores_classic::drop(),
         ];
 
         let drop_foreign_key_stmts = vec![
@@ -473,50 +306,11 @@ impl MigrationTrait for Migration {
             followers::drop_foreign_keys(),
             user_settings::drop_foreign_keys(),
             beatmap_ratings::drop_foreign_keys(),
-            scores_standard::drop_foreign_keys(),
-            scores_taiko::drop_foreign_keys(),
-            scores_fruits::drop_foreign_keys(),
-            scores_mania::drop_foreign_keys(),
-            scores_standard_relax::drop_foreign_keys(),
-            scores_standard_autopilot::drop_foreign_keys(),
-            scores_taiko_relax::drop_foreign_keys(),
-            scores_fruits_relax::drop_foreign_keys(),
-            score_pp_standard::drop_foreign_keys(),
-            user_stats_standard_score_v2::drop_foreign_keys(),
-            score_pp_taiko::drop_foreign_keys(),
-            score_pp_fruits::drop_foreign_keys(),
-            score_pp_mania::drop_foreign_keys(),
-            score_pp_standard_relax::drop_foreign_keys(),
-            score_pp_standard_autopilot::drop_foreign_keys(),
-            score_pp_taiko_relax::drop_foreign_keys(),
-            score_pp_fruits_relax::drop_foreign_keys(),
-            user_stats_standard::drop_foreign_keys(),
-            user_stats_taiko::drop_foreign_keys(),
-            user_stats_fruits::drop_foreign_keys(),
-            user_stats_mania::drop_foreign_keys(),
-            user_stats_standard_relax::drop_foreign_keys(),
-            user_stats_standard_autopilot::drop_foreign_keys(),
-            user_stats_taiko_relax::drop_foreign_keys(),
-            user_stats_fruits_relax::drop_foreign_keys(),
-            user_pp_standard::drop_foreign_keys(),
-            user_pp_taiko::drop_foreign_keys(),
-            user_pp_fruits::drop_foreign_keys(),
-            user_pp_mania::drop_foreign_keys(),
-            user_pp_standard_relax::drop_foreign_keys(),
-            user_pp_standard_autopilot::drop_foreign_keys(),
-            user_pp_taiko_relax::drop_foreign_keys(),
-            user_pp_fruits_relax::drop_foreign_keys(),
-            leaderboard_standard::drop_foreign_keys(),
-            leaderboard_taiko::drop_foreign_keys(),
-            leaderboard_fruits::drop_foreign_keys(),
-            leaderboard_mania::drop_foreign_keys(),
-            leaderboard_standard_relax::drop_foreign_keys(),
-            leaderboard_standard_autopilot::drop_foreign_keys(),
-            leaderboard_taiko_relax::drop_foreign_keys(),
-            leaderboard_fruits_relax::drop_foreign_keys(),
             channel_users::drop_foreign_keys(),
             channel_privileges::drop_foreign_keys(),
             chat_messages::drop_foreign_keys(),
+            scores::drop_foreign_keys(),
+            scores_classic::drop_foreign_keys(),
         ]
         .into_iter()
         .flatten()
@@ -530,41 +324,12 @@ impl MigrationTrait for Migration {
             followers::drop_indexes(),
             beatmaps::drop_indexes(),
             beatmap_ratings::drop_indexes(),
-            scores_standard::drop_indexes(),
-            scores_taiko::drop_indexes(),
-            scores_fruits::drop_indexes(),
-            scores_mania::drop_indexes(),
-            scores_standard_relax::drop_indexes(),
-            scores_standard_autopilot::drop_indexes(),
-            scores_taiko_relax::drop_indexes(),
-            scores_fruits_relax::drop_indexes(),
-            score_pp_standard::drop_indexes(),
-            score_pp_taiko::drop_indexes(),
-            score_pp_fruits::drop_indexes(),
-            score_pp_mania::drop_indexes(),
-            score_pp_standard_relax::drop_indexes(),
-            score_pp_standard_autopilot::drop_indexes(),
-            score_pp_taiko_relax::drop_indexes(),
-            score_pp_fruits_relax::drop_indexes(),
-            user_pp_standard::drop_indexes(),
-            user_pp_taiko::drop_indexes(),
-            user_pp_fruits::drop_indexes(),
-            user_pp_mania::drop_indexes(),
-            user_pp_standard_relax::drop_indexes(),
-            user_pp_standard_autopilot::drop_indexes(),
-            user_pp_taiko_relax::drop_indexes(),
-            user_pp_fruits_relax::drop_indexes(),
-            leaderboard_standard::drop_indexes(),
-            leaderboard_taiko::drop_indexes(),
-            leaderboard_fruits::drop_indexes(),
-            leaderboard_mania::drop_indexes(),
-            leaderboard_standard_relax::drop_indexes(),
-            leaderboard_standard_autopilot::drop_indexes(),
-            leaderboard_taiko_relax::drop_indexes(),
-            leaderboard_fruits_relax::drop_indexes(),
             channels::drop_indexes(),
             channel_users::drop_indexes(),
             channel_privileges::drop_indexes(),
+            chat_messages::drop_indexes(),
+            scores::drop_indexes(),
+            scores_classic::drop_indexes(),
         ]
         .into_iter()
         .flatten()
@@ -573,9 +338,6 @@ impl MigrationTrait for Migration {
         let drop_type_stmts = vec![
             extension::postgres::Type::drop().name(RankStatus::Enum).to_owned(),
             extension::postgres::Type::drop().name(GameMode::Enum).to_owned(),
-            extension::postgres::Type::drop()
-                .name(ScoreStatus::Enum)
-                .to_owned(),
             extension::postgres::Type::drop().name(ScoreGrade::Enum).to_owned(),
             extension::postgres::Type::drop().name(PPVersion::Enum).to_owned(),
             extension::postgres::Type::drop()
@@ -1640,814 +1402,6 @@ pub mod beatmap_ratings {
     }
 }
 
-macro_rules! define_user_mode_scores {
-    ($table_name: ident, $iden: ident) => {
-        pub mod $table_name {
-            use sea_orm_migration::prelude::*;
-
-            use super::{users::Users, ScoreGrade, ScoreStatus, ScoreVersion};
-
-            const FOREIGN_KEY_USER_ID: &str =
-                concat!("FK_", stringify!($table_name), "_user_id");
-            const INDEX_MAP_MD5: &str =
-                concat!("IDX_", stringify!($table_name), "_map_md5");
-            const INDEX_USER_ID: &str =
-                concat!("IDX_", stringify!($table_name), "_user_id");
-
-            #[derive(Iden)]
-            pub enum $iden {
-                Table,
-                Id,
-                UserId,
-                ScoreMd5,
-                MapMd5,
-                ScoreVersion,
-                Score,
-                Accuracy,
-                Combo,
-                Mods,
-                N300,
-                N100,
-                N50,
-                Miss,
-                Geki,
-                Katu,
-                Playtime,
-                Perfect,
-                Status,
-                Grade,
-                ClientFlags,
-                ClientVersion,
-                Confidence,
-                Verified,
-                Invisible,
-                VerifyAt,
-                CreateAt,
-                UpdatedAt,
-            }
-
-            pub fn create() -> TableCreateStatement {
-                Table::create()
-                    .table($iden::Table)
-                    .if_not_exists()
-                    .col(
-                        ColumnDef::new($iden::Id)
-                            .big_integer()
-                            .not_null()
-                            .auto_increment()
-                            .primary_key(),
-                    )
-                    .col(ColumnDef::new($iden::UserId).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::ScoreMd5)
-                            .char()
-                            .char_len(32)
-                            .not_null()
-                            .unique_key(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::MapMd5)
-                            .char()
-                            .char_len(32)
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::ScoreVersion)
-                            .enumeration(
-                                ScoreVersion::Enum,
-                                [ScoreVersion::V1, ScoreVersion::V2],
-                            )
-                            .not_null()
-                            .default(ScoreVersion::V1.to_string()),
-                    )
-                    .col(ColumnDef::new($iden::Score).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::Accuracy)
-                            .decimal()
-                            .decimal_len(6, 2)
-                            .not_null(),
-                    )
-                    .col(ColumnDef::new($iden::Combo).integer().not_null())
-                    .col(ColumnDef::new($iden::Mods).integer().not_null())
-                    .col(ColumnDef::new($iden::N300).integer().not_null())
-                    .col(ColumnDef::new($iden::N100).integer().not_null())
-                    .col(ColumnDef::new($iden::N50).integer().not_null())
-                    .col(ColumnDef::new($iden::Miss).integer().not_null())
-                    .col(ColumnDef::new($iden::Geki).integer().not_null())
-                    .col(ColumnDef::new($iden::Katu).integer().not_null())
-                    .col(ColumnDef::new($iden::Playtime).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::Perfect)
-                            .boolean()
-                            .not_null()
-                            .default(false),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Status)
-                            .enumeration(
-                                ScoreStatus::Enum,
-                                [
-                                    ScoreStatus::Failed,
-                                    ScoreStatus::Passed,
-                                    ScoreStatus::High,
-                                ],
-                            )
-                            .not_null()
-                            .default(ScoreStatus::Failed.to_string()),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Grade)
-                            .enumeration(
-                                ScoreGrade::Enum,
-                                [
-                                    ScoreGrade::A,
-                                    ScoreGrade::B,
-                                    ScoreGrade::C,
-                                    ScoreGrade::D,
-                                    ScoreGrade::S,
-                                    ScoreGrade::SH,
-                                    ScoreGrade::X,
-                                    ScoreGrade::XH,
-                                    ScoreGrade::F,
-                                ],
-                            )
-                            .not_null()
-                            .default(ScoreGrade::F.to_string()),
-                    )
-                    .col(
-                        ColumnDef::new($iden::ClientFlags).integer().not_null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::ClientVersion)
-                            .string()
-                            .not_null(),
-                    )
-                    .col(ColumnDef::new($iden::Confidence).integer().null())
-                    .col(
-                        ColumnDef::new($iden::Verified)
-                            .boolean()
-                            .not_null()
-                            .default(false),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Invisible)
-                            .boolean()
-                            .not_null()
-                            .default(false),
-                    )
-                    .col(
-                        ColumnDef::new($iden::VerifyAt)
-                            .timestamp_with_time_zone()
-                            .default(Expr::current_timestamp())
-                            .null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::CreateAt)
-                            .timestamp_with_time_zone()
-                            .default(Expr::current_timestamp())
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::UpdatedAt)
-                            .timestamp_with_time_zone()
-                            .default(Expr::current_timestamp())
-                            .not_null(),
-                    )
-                    .to_owned()
-            }
-
-            pub fn drop() -> TableDropStatement {
-                Table::drop().table($iden::Table).to_owned()
-            }
-
-            pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
-                vec![sea_query::ForeignKey::create()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .from($iden::Table, $iden::UserId)
-                    .to(Users::Table, Users::Id)
-                    .on_delete(ForeignKeyAction::Cascade)
-                    .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()]
-            }
-
-            pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
-                vec![sea_query::ForeignKey::drop()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .table($iden::Table)
-                    .to_owned()]
-            }
-
-            pub fn create_indexes() -> Vec<IndexCreateStatement> {
-                vec![
-                    sea_query::Index::create()
-                        .name(INDEX_MAP_MD5)
-                        .table($iden::Table)
-                        .col($iden::MapMd5)
-                        .to_owned(),
-                    sea_query::Index::create()
-                        .name(INDEX_USER_ID)
-                        .table($iden::Table)
-                        .col($iden::UserId)
-                        .to_owned(),
-                ]
-            }
-
-            pub fn drop_indexes() -> Vec<IndexDropStatement> {
-                vec![
-                    sea_query::Index::drop()
-                        .table($iden::Table)
-                        .name(INDEX_MAP_MD5)
-                        .to_owned(),
-                    sea_query::Index::drop()
-                        .table($iden::Table)
-                        .name(INDEX_USER_ID)
-                        .to_owned(),
-                ]
-            }
-        }
-    };
-}
-
-define_user_mode_scores!(scores_standard, ScoresStandard);
-define_user_mode_scores!(scores_taiko, ScoresTaiko);
-define_user_mode_scores!(scores_fruits, ScoresFruits);
-define_user_mode_scores!(scores_mania, ScoresMania);
-define_user_mode_scores!(scores_standard_relax, ScoresStandardRelax);
-define_user_mode_scores!(scores_standard_autopilot, ScoresStandardAutopilot);
-define_user_mode_scores!(scores_taiko_relax, ScoresTaikoRelax);
-define_user_mode_scores!(scores_fruits_relax, ScoresFruitsRelax);
-
-macro_rules! define_score_mode_pp {
-    ($table_name: ident, $iden: ident, $relate_table: ident :: $relate_iden: ident) => {
-        pub mod $table_name {
-            use sea_orm_migration::prelude::*;
-
-            use super::{$relate_table::$relate_iden, PPVersion};
-
-            const FOREIGN_KEY_SCORE_ID: &str =
-                concat!("FK_", stringify!($table_name), "_score_id");
-            const INDEX_PP_WITH_VERSION: &str =
-                concat!("IDX_", stringify!($table_name), "_pp");
-
-            #[derive(Iden)]
-            pub enum $iden {
-                Table,
-                ScoreId,
-                PPVersion,
-                PP,
-                RawPP,
-            }
-
-            pub fn create() -> TableCreateStatement {
-                Table::create()
-                    .table($iden::Table)
-                    .if_not_exists()
-                    .col(
-                        ColumnDef::new($iden::ScoreId).big_integer().not_null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::PPVersion)
-                            .enumeration(
-                                PPVersion::Enum,
-                                [PPVersion::V1, PPVersion::V2],
-                            )
-                            .not_null()
-                            .default(PPVersion::V2.to_string()),
-                    )
-                    .col(
-                        ColumnDef::new($iden::PP)
-                            .decimal()
-                            .decimal_len(16, 2)
-                            .not_null()
-                            .default(0.0),
-                    )
-                    .col(ColumnDef::new($iden::RawPP).json().null())
-                    .primary_key(
-                        sea_query::Index::create()
-                            .col($iden::ScoreId)
-                            .col($iden::PPVersion),
-                    )
-                    .to_owned()
-            }
-
-            pub fn drop() -> TableDropStatement {
-                Table::drop().table($iden::Table).to_owned()
-            }
-
-            pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
-                vec![sea_query::ForeignKey::create()
-                    .name(FOREIGN_KEY_SCORE_ID)
-                    .from($iden::Table, $iden::ScoreId)
-                    .to($relate_iden::Table, $relate_iden::Id)
-                    .on_delete(ForeignKeyAction::Cascade)
-                    .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()]
-            }
-
-            pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
-                vec![sea_query::ForeignKey::drop()
-                    .name(FOREIGN_KEY_SCORE_ID)
-                    .table($iden::Table)
-                    .to_owned()]
-            }
-
-            pub fn create_indexes() -> Vec<IndexCreateStatement> {
-                vec![sea_query::Index::create()
-                    .name(INDEX_PP_WITH_VERSION)
-                    .table($iden::Table)
-                    .col($iden::PPVersion)
-                    .col($iden::PP)
-                    .to_owned()]
-            }
-
-            pub fn drop_indexes() -> Vec<IndexDropStatement> {
-                vec![sea_query::Index::drop()
-                    .table($iden::Table)
-                    .name(INDEX_PP_WITH_VERSION)
-                    .to_owned()]
-            }
-        }
-    };
-}
-
-define_score_mode_pp!(
-    score_pp_standard,
-    ScorePPStandard,
-    scores_standard::ScoresStandard
-);
-define_score_mode_pp!(score_pp_taiko, ScorePPTaiko, scores_taiko::ScoresTaiko);
-define_score_mode_pp!(
-    score_pp_fruits,
-    ScorePPFruits,
-    scores_fruits::ScoresFruits
-);
-define_score_mode_pp!(score_pp_mania, ScorePPMania, scores_mania::ScoresMania);
-define_score_mode_pp!(
-    score_pp_standard_relax,
-    ScorePPStandardRelax,
-    scores_standard_relax::ScoresStandardRelax
-);
-define_score_mode_pp!(
-    score_pp_standard_autopilot,
-    ScorePPStandardAutopilot,
-    scores_standard_autopilot::ScoresStandardAutopilot
-);
-define_score_mode_pp!(
-    score_pp_taiko_relax,
-    ScorePPTaikoRelax,
-    scores_taiko_relax::ScoresTaikoRelax
-);
-define_score_mode_pp!(
-    score_pp_fruits_relax,
-    ScorePPFruitsRelax,
-    scores_fruits_relax::ScoresFruitsRelax
-);
-
-macro_rules! define_user_mode_stats {
-    ($table_name: ident, $iden: ident) => {
-        pub mod $table_name {
-            use sea_orm_migration::prelude::*;
-
-            use super::users::Users;
-
-            const FOREIGN_KEY_USER_ID: &str =
-                concat!("FK_", stringify!($table_name), "_user_id");
-
-            #[derive(Iden)]
-            pub enum $iden {
-                Table,
-                UserId,
-                TotalScore,
-                RankedScore,
-                Playcount,
-                TotalHits,
-                Accuracy,
-                MaxCombo,
-                TotalSecondsPlayed,
-                Count300,
-                Count100,
-                Count50,
-                CountMiss,
-                CountFailed,
-                CountQuit,
-                UpdatedAt,
-            }
-
-            pub fn create() -> TableCreateStatement {
-                Table::create()
-                    .table($iden::Table)
-                    .if_not_exists()
-                    .col(
-                        ColumnDef::new($iden::UserId)
-                            .integer()
-                            .primary_key()
-                            .not_null(),
-                    )
-                    .col(
-                        ColumnDef::new($iden::TotalScore)
-                            .big_integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::RankedScore)
-                            .big_integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Playcount)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::TotalHits)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Accuracy)
-                            .decimal()
-                            .decimal_len(6, 2)
-                            .not_null()
-                            .default(0.0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::MaxCombo)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::TotalSecondsPlayed)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Count300)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Count100)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::Count50)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::CountMiss)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::CountFailed)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::CountQuit)
-                            .integer()
-                            .not_null()
-                            .default(0),
-                    )
-                    .col(
-                        ColumnDef::new($iden::UpdatedAt)
-                            .timestamp_with_time_zone()
-                            .default(Expr::current_timestamp())
-                            .not_null(),
-                    )
-                    .to_owned()
-            }
-
-            pub fn drop() -> TableDropStatement {
-                Table::drop().table($iden::Table).to_owned()
-            }
-
-            pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
-                vec![sea_query::ForeignKey::create()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .from($iden::Table, $iden::UserId)
-                    .to(Users::Table, Users::Id)
-                    .on_delete(ForeignKeyAction::Cascade)
-                    .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()]
-            }
-
-            pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
-                vec![sea_query::ForeignKey::drop()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .table($iden::Table)
-                    .to_owned()]
-            }
-        }
-    };
-}
-
-define_user_mode_stats!(user_stats_standard, UserStatsStandard);
-define_user_mode_stats!(user_stats_standard_score_v2, UserStatsStandardScoreV2);
-define_user_mode_stats!(user_stats_taiko, UserStatsTaiko);
-define_user_mode_stats!(user_stats_fruits, UserStatsFruits);
-define_user_mode_stats!(user_stats_mania, UserStatsMania);
-define_user_mode_stats!(user_stats_standard_relax, UserStatsStandardRelax);
-define_user_mode_stats!(
-    user_stats_standard_autopilot,
-    UserStatsStandardAutopilot
-);
-define_user_mode_stats!(user_stats_taiko_relax, UserStatsTaikoRelax);
-define_user_mode_stats!(user_stats_fruits_relax, UserStatsFruitsRelax);
-
-macro_rules! define_user_mode_pp {
-    ($table_name: ident, $iden: ident) => {
-        pub mod $table_name {
-            use sea_orm_migration::prelude::*;
-
-            use super::{users::Users, PPVersion};
-
-            const FOREIGN_KEY_USER_ID: &str =
-                concat!("FK_", stringify!($table_name), "_user_id");
-            const INDEX_PP_WITH_VERSION: &str =
-                concat!("IDX_", stringify!($table_name), "_pp");
-
-            #[derive(Iden)]
-            pub enum $iden {
-                Table,
-                UserId,
-                PPVersion,
-                PP,
-                RawPP,
-            }
-
-            pub fn create() -> TableCreateStatement {
-                Table::create()
-                    .table($iden::Table)
-                    .if_not_exists()
-                    .col(ColumnDef::new($iden::UserId).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::PPVersion)
-                            .enumeration(
-                                PPVersion::Enum,
-                                [PPVersion::V1, PPVersion::V2],
-                            )
-                            .not_null()
-                            .default(PPVersion::V2.to_string()),
-                    )
-                    .col(
-                        ColumnDef::new($iden::PP)
-                            .decimal()
-                            .decimal_len(16, 2)
-                            .not_null()
-                            .default(0.0),
-                    )
-                    .col(ColumnDef::new($iden::RawPP).json().null())
-                    .primary_key(
-                        sea_query::Index::create()
-                            .col($iden::UserId)
-                            .col($iden::PPVersion),
-                    )
-                    .to_owned()
-            }
-
-            pub fn drop() -> TableDropStatement {
-                Table::drop().table($iden::Table).to_owned()
-            }
-
-            pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
-                vec![sea_query::ForeignKey::create()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .from($iden::Table, $iden::UserId)
-                    .to(Users::Table, Users::Id)
-                    .on_delete(ForeignKeyAction::Cascade)
-                    .on_update(ForeignKeyAction::Cascade)
-                    .to_owned()]
-            }
-
-            pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
-                vec![sea_query::ForeignKey::drop()
-                    .name(FOREIGN_KEY_USER_ID)
-                    .table($iden::Table)
-                    .to_owned()]
-            }
-
-            pub fn create_indexes() -> Vec<IndexCreateStatement> {
-                vec![sea_query::Index::create()
-                    .name(INDEX_PP_WITH_VERSION)
-                    .table($iden::Table)
-                    .col($iden::PPVersion)
-                    .col($iden::PP)
-                    .to_owned()]
-            }
-
-            pub fn drop_indexes() -> Vec<IndexDropStatement> {
-                vec![sea_query::Index::drop()
-                    .table($iden::Table)
-                    .name(INDEX_PP_WITH_VERSION)
-                    .to_owned()]
-            }
-        }
-    };
-}
-
-define_user_mode_pp!(user_pp_standard, UserPPStandard);
-define_user_mode_pp!(user_pp_taiko, UserPPTaiko);
-define_user_mode_pp!(user_pp_fruits, UserPPFruits);
-define_user_mode_pp!(user_pp_mania, UserPPMania);
-define_user_mode_pp!(user_pp_standard_relax, UserPPStandardRelax);
-define_user_mode_pp!(user_pp_standard_autopilot, UserPPStandardAutopilot);
-define_user_mode_pp!(user_pp_taiko_relax, UserPPTaikoRelax);
-define_user_mode_pp!(user_pp_fruits_relax, UserPPFruitsRelax);
-
-macro_rules! define_beatmap_mode_leaderboard {
-    ($table_name: ident, $iden: ident, $relate_table: ident :: $relate_iden: ident) => {
-        pub mod $table_name {
-            use sea_orm_migration::prelude::*;
-
-            use super::{
-                beatmaps::Beatmaps, users::Users, $relate_table::$relate_iden,
-                RankingType,
-            };
-
-            const FOREIGN_KEY_BEATMAP_ID: &str =
-                concat!("FK_", stringify!($table_name), "_beatmap_id");
-            const FOREIGN_KEY_USER_ID: &str =
-                concat!("FK_", stringify!($table_name), "_user_id");
-            const FOREIGN_KEY_SCORE_ID: &str =
-                concat!("FK_", stringify!($table_name), "_score_id");
-            const INDEX_USER_ID: &str =
-                concat!("IDX_", stringify!($table_name), "_user_id");
-            const INDEX_SCORE_ID: &str =
-                concat!("IDX_", stringify!($table_name), "_score_id");
-
-            #[derive(Iden)]
-            pub enum $iden {
-                Table,
-                BeatmapId,
-                RankingType,
-                UserId,
-                ScoreId,
-            }
-
-            pub fn create() -> TableCreateStatement {
-                Table::create()
-                    .table($iden::Table)
-                    .if_not_exists()
-                    .col(ColumnDef::new($iden::BeatmapId).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::RankingType)
-                            .enumeration(
-                                RankingType::Enum,
-                                [
-                                    RankingType::ScoreV1,
-                                    RankingType::ScoreV2,
-                                    RankingType::PPV1,
-                                    RankingType::PPV2,
-                                ],
-                            )
-                            .not_null()
-                            .default(RankingType::ScoreV1.to_string()),
-                    )
-                    .col(ColumnDef::new($iden::UserId).integer().not_null())
-                    .col(
-                        ColumnDef::new($iden::ScoreId).big_integer().not_null(),
-                    )
-                    .primary_key(
-                        sea_query::Index::create()
-                            .col($iden::BeatmapId)
-                            .col($iden::RankingType),
-                    )
-                    .to_owned()
-            }
-
-            pub fn drop() -> TableDropStatement {
-                Table::drop().table($iden::Table).to_owned()
-            }
-
-            pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
-                vec![
-                    sea_query::ForeignKey::create()
-                        .name(FOREIGN_KEY_BEATMAP_ID)
-                        .from($iden::Table, $iden::BeatmapId)
-                        .to(Beatmaps::Table, Beatmaps::Bid)
-                        .on_delete(ForeignKeyAction::Cascade)
-                        .on_update(ForeignKeyAction::Cascade)
-                        .to_owned(),
-                    sea_query::ForeignKey::create()
-                        .name(FOREIGN_KEY_USER_ID)
-                        .from($iden::Table, $iden::UserId)
-                        .to(Users::Table, Users::Id)
-                        .on_delete(ForeignKeyAction::Cascade)
-                        .on_update(ForeignKeyAction::Cascade)
-                        .to_owned(),
-                    sea_query::ForeignKey::create()
-                        .name(FOREIGN_KEY_SCORE_ID)
-                        .from($iden::Table, $iden::ScoreId)
-                        .to($relate_iden::Table, $relate_iden::Id)
-                        .on_delete(ForeignKeyAction::Cascade)
-                        .on_update(ForeignKeyAction::Cascade)
-                        .to_owned(),
-                ]
-            }
-
-            pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
-                vec![
-                    sea_query::ForeignKey::drop()
-                        .name(FOREIGN_KEY_BEATMAP_ID)
-                        .table($iden::Table)
-                        .to_owned(),
-                    sea_query::ForeignKey::drop()
-                        .name(FOREIGN_KEY_USER_ID)
-                        .table($iden::Table)
-                        .to_owned(),
-                    sea_query::ForeignKey::drop()
-                        .name(FOREIGN_KEY_SCORE_ID)
-                        .table($iden::Table)
-                        .to_owned(),
-                ]
-            }
-
-            pub fn create_indexes() -> Vec<IndexCreateStatement> {
-                vec![
-                    sea_query::Index::create()
-                        .name(INDEX_USER_ID)
-                        .table($iden::Table)
-                        .col($iden::UserId)
-                        .to_owned(),
-                    sea_query::Index::create()
-                        .name(INDEX_SCORE_ID)
-                        .table($iden::Table)
-                        .col($iden::ScoreId)
-                        .to_owned(),
-                ]
-            }
-
-            pub fn drop_indexes() -> Vec<IndexDropStatement> {
-                vec![
-                    sea_query::Index::drop()
-                        .table($iden::Table)
-                        .name(INDEX_USER_ID)
-                        .to_owned(),
-                    sea_query::Index::drop()
-                        .table($iden::Table)
-                        .name(INDEX_SCORE_ID)
-                        .to_owned(),
-                ]
-            }
-        }
-    };
-}
-
-define_beatmap_mode_leaderboard!(
-    leaderboard_standard,
-    LeaderboardStandard,
-    scores_standard::ScoresStandard
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_taiko,
-    LeaderboardTaiko,
-    scores_taiko::ScoresTaiko
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_fruits,
-    LeaderboardFruits,
-    scores_fruits::ScoresFruits
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_mania,
-    LeaderboardMania,
-    scores_mania::ScoresMania
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_standard_relax,
-    LeaderboardStandardRelax,
-    scores_standard_relax::ScoresStandardRelax
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_standard_autopilot,
-    LeaderboardStandardAutopilot,
-    scores_standard_autopilot::ScoresStandardAutopilot
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_taiko_relax,
-    LeaderboardTaikoRelax,
-    scores_taiko_relax::ScoresTaikoRelax
-);
-define_beatmap_mode_leaderboard!(
-    leaderboard_fruits_relax,
-    LeaderboardFruitsRelax,
-    scores_fruits_relax::ScoresFruitsRelax
-);
-
 pub mod channels {
     use sea_orm_migration::prelude::*;
 
@@ -2821,5 +1775,321 @@ pub mod chat_messages {
             .table(ChatMessages::Table)
             .name(INDEX_CHANNEL_ID)
             .to_owned()]
+    }
+}
+
+pub mod scores {
+    use sea_orm_migration::prelude::*;
+
+    use super::users::Users;
+
+    const FOREIGN_KEY_USER_ID: &str = "FK_scores_user_id";
+    const INDEX_CKSM: &str = "IDX_scores_cksm";
+    const INDEX_USER_ID: &str = "IDX_scores_user_id";
+
+    #[derive(Iden)]
+    pub enum Scores {
+        Table,
+        Id,
+        MapHash,
+        UserId,
+        Cksm,
+        Kind,
+        PlayTime,
+        Completed,
+        VerifiedAt,
+        CreatedAt,
+        UpdatedAt,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(Scores::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(Scores::Id)
+                    .big_integer()
+                    .not_null()
+                    .auto_increment()
+                    .primary_key(),
+            )
+            .col(ColumnDef::new(Scores::MapHash).char().char_len(32).not_null())
+            .col(ColumnDef::new(Scores::UserId).integer().not_null())
+            .col(ColumnDef::new(Scores::Cksm).string().not_null().unique_key())
+            .col(ColumnDef::new(Scores::Kind).string().not_null())
+            .col(ColumnDef::new(Scores::PlayTime).integer().not_null())
+            .col(
+                ColumnDef::new(Scores::Completed)
+                    .boolean()
+                    .not_null()
+                    .default(false),
+            )
+            .col(
+                ColumnDef::new(Scores::VerifiedAt)
+                    .timestamp_with_time_zone()
+                    .null(),
+            )
+            .col(
+                ColumnDef::new(Scores::CreatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(Scores::UpdatedAt)
+                    .timestamp_with_time_zone()
+                    .default(Expr::current_timestamp())
+                    .not_null(),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(Scores::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_USER_ID)
+            .from(Scores::Table, Scores::UserId)
+            .to(Users::Table, Users::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_USER_ID)
+            .table(Scores::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![
+            sea_query::Index::create()
+                .name(INDEX_CKSM)
+                .table(Scores::Table)
+                .col(Scores::Cksm)
+                .unique()
+                .to_owned(),
+            sea_query::Index::create()
+                .name(INDEX_USER_ID)
+                .table(Scores::Table)
+                .col(Scores::UserId)
+                .to_owned(),
+        ]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![
+            sea_query::Index::drop()
+                .table(Scores::Table)
+                .name(INDEX_CKSM)
+                .to_owned(),
+            sea_query::Index::drop()
+                .table(Scores::Table)
+                .name(INDEX_USER_ID)
+                .to_owned(),
+        ]
+    }
+}
+
+pub mod scores_classic {
+    use sea_orm_migration::prelude::*;
+
+    use super::scores::Scores;
+
+    const FOREIGN_KEY_SCORES_ID: &str = "FK_scores_classic_scores_id";
+
+    #[derive(Iden)]
+    pub enum ScoresClassic {
+        Table,
+        Id,
+        Mode,
+        ScoreVersion,
+        Score,
+        Accuracy,
+        Combo,
+        Mods,
+        N300,
+        N100,
+        N50,
+        Miss,
+        Geki,
+        Katu,
+        Perfect,
+        Grade,
+        ClientFlags,
+        ClientVersion,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(ScoresClassic::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(ScoresClassic::Id)
+                    .big_integer()
+                    .not_null()
+                    .primary_key(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::Mode)
+                    .enumeration(
+                        super::GameMode::Enum,
+                        [
+                            super::GameMode::Standard,
+                            super::GameMode::Taiko,
+                            super::GameMode::Fruits,
+                            super::GameMode::Mania,
+                        ],
+                    )
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ScoreVersion)
+                    .enumeration(
+                        super::ScoreVersion::Enum,
+                        [super::ScoreVersion::V1, super::ScoreVersion::V2],
+                    )
+                    .not_null(),
+            )
+            .col(ColumnDef::new(ScoresClassic::Score).integer().not_null())
+            .col(
+                ColumnDef::new(ScoresClassic::Accuracy)
+                    .decimal()
+                    .decimal_len(6, 2)
+                    .not_null(),
+            )
+            .col(ColumnDef::new(ScoresClassic::Combo).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Mods).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N300).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N100).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::N50).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Miss).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Geki).integer().not_null())
+            .col(ColumnDef::new(ScoresClassic::Katu).integer().not_null())
+            .col(
+                ColumnDef::new(ScoresClassic::Perfect)
+                    .boolean()
+                    .not_null()
+                    .default(false),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::Grade)
+                    .enumeration(
+                        super::ScoreGrade::Enum,
+                        [
+                            super::ScoreGrade::A,
+                            super::ScoreGrade::B,
+                            super::ScoreGrade::C,
+                            super::ScoreGrade::D,
+                            super::ScoreGrade::S,
+                            super::ScoreGrade::SH,
+                            super::ScoreGrade::X,
+                            super::ScoreGrade::XH,
+                            super::ScoreGrade::F,
+                        ],
+                    )
+                    .not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ClientFlags).integer().not_null(),
+            )
+            .col(
+                ColumnDef::new(ScoresClassic::ClientVersion)
+                    .string()
+                    .not_null(),
+            )
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(ScoresClassic::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .from(ScoresClassic::Table, ScoresClassic::Id)
+            .to(Scores::Table, Scores::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .table(ScoresClassic::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![]
+    }
+}
+
+pub mod scores_generic {
+    use sea_orm_migration::prelude::*;
+
+    use super::scores::Scores;
+
+    const FOREIGN_KEY_SCORES_ID: &str = "FK_scores_generic_scores_id";
+
+    #[derive(Iden)]
+    pub enum ScoreGeneric {
+        Table,
+        Id,
+        Mode,
+        JSON,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(ScoreGeneric::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(ScoreGeneric::Id)
+                    .big_integer()
+                    .not_null()
+                    .primary_key(),
+            )
+            .col(ColumnDef::new(ScoreGeneric::JSON).json().not_null())
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(ScoreGeneric::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .from(ScoreGeneric::Table, ScoreGeneric::Id)
+            .to(Scores::Table, Scores::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .table(ScoresClassic::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![]
     }
 }

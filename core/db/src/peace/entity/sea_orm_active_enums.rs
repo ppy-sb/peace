@@ -82,6 +82,20 @@ pub enum RankingType {
     #[sea_orm(string_value = "score_v2")]
     ScoreV2,
 }
+
+#[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
+#[sea_orm(
+    rs_type = "String",
+    db_type = "String(None)",
+    enum_name = "score_kind"
+)]
+pub enum ScoreKind {
+    #[sea_orm(string_value = "classic")]
+    Classic,
+    #[sea_orm(string_value = "generic")]
+    Generic,
+}
+
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "score_grade")]
 pub enum ScoreGrade {
@@ -105,12 +119,14 @@ pub enum ScoreGrade {
     Xh,
 }
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum)]
-#[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "score_status")]
+#[sea_orm(
+    rs_type = "String",
+    db_type = "String(None)",
+    enum_name = "score_status"
+)]
 pub enum ScoreStatus {
-    #[sea_orm(string_value = "Failed")]
-    Failed,
-    #[sea_orm(string_value = "High")]
-    High,
+    #[sea_orm(string_value = "DNF")]
+    DNF,
     #[sea_orm(string_value = "Passed")]
     Passed,
 }
