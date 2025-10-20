@@ -9,9 +9,9 @@ use sea_orm::entity::prelude::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i64,
-    pub user_id: i32,
     // map md5
     pub map_hash: String,
+    pub user_id: i32,
     // score checksum
     #[sea_orm(unique)]
     pub cksm: String,

@@ -16,18 +16,6 @@ pub enum GameMode {
 }
 
 #[derive(Iden)]
-pub enum ScoreStatus {
-    #[iden = "score_status"]
-    Enum = -1,
-    #[iden = "Failed"]
-    Failed = 0,
-    #[iden = "Passed"]
-    Passed = 1,
-    #[iden = "High"]
-    High = 2,
-}
-
-#[derive(Iden)]
 enum ScoreGrade {
     #[iden = "score_grade"]
     Enum = -1,
@@ -218,14 +206,6 @@ impl MigrationTrait for Migration {
                 ])
                 .to_owned(),
             extension::postgres::Type::create()
-                .as_enum(ScoreStatus::Enum)
-                .values([
-                    ScoreStatus::Failed,
-                    ScoreStatus::Passed,
-                    ScoreStatus::High,
-                ])
-                .to_owned(),
-            extension::postgres::Type::create()
                 .as_enum(ScoreGrade::Enum)
                 .values([
                     ScoreGrade::A,
@@ -358,9 +338,6 @@ impl MigrationTrait for Migration {
         let drop_type_stmts = vec![
             extension::postgres::Type::drop().name(RankStatus::Enum).to_owned(),
             extension::postgres::Type::drop().name(GameMode::Enum).to_owned(),
-            extension::postgres::Type::drop()
-                .name(ScoreStatus::Enum)
-                .to_owned(),
             extension::postgres::Type::drop().name(ScoreGrade::Enum).to_owned(),
             extension::postgres::Type::drop().name(PPVersion::Enum).to_owned(),
             extension::postgres::Type::drop()
@@ -1814,12 +1791,12 @@ pub mod scores {
     pub enum Scores {
         Table,
         Id,
-        UserId,
         MapHash,
+        UserId,
         Cksm,
-        ScoreKind,
-        Invisible,
-        Verified,
+        Kind,
+        PlayTime,
+        Completed,
         VerifiedAt,
         CreatedAt,
         UpdatedAt,
@@ -1836,18 +1813,13 @@ pub mod scores {
                     .auto_increment()
                     .primary_key(),
             )
-            .col(ColumnDef::new(Scores::UserId).integer().not_null())
             .col(ColumnDef::new(Scores::MapHash).char().char_len(32).not_null())
+            .col(ColumnDef::new(Scores::UserId).integer().not_null())
             .col(ColumnDef::new(Scores::Cksm).string().not_null().unique_key())
-            .col(ColumnDef::new(Scores::ScoreKind).string().not_null())
+            .col(ColumnDef::new(Scores::Kind).string().not_null())
+            .col(ColumnDef::new(Scores::PlayTime).integer().not_null())
             .col(
-                ColumnDef::new(Scores::Invisible)
-                    .boolean()
-                    .not_null()
-                    .default(false),
-            )
-            .col(
-                ColumnDef::new(Scores::Verified)
+                ColumnDef::new(Scores::Completed)
                     .boolean()
                     .not_null()
                     .default(false),
@@ -1946,9 +1918,7 @@ pub mod scores_classic {
         Miss,
         Geki,
         Katu,
-        Playtime,
         Perfect,
-        Status,
         Grade,
         ClientFlags,
         ClientVersion,
@@ -2000,24 +1970,11 @@ pub mod scores_classic {
             .col(ColumnDef::new(ScoresClassic::Miss).integer().not_null())
             .col(ColumnDef::new(ScoresClassic::Geki).integer().not_null())
             .col(ColumnDef::new(ScoresClassic::Katu).integer().not_null())
-            .col(ColumnDef::new(ScoresClassic::Playtime).integer().not_null())
             .col(
                 ColumnDef::new(ScoresClassic::Perfect)
                     .boolean()
                     .not_null()
                     .default(false),
-            )
-            .col(
-                ColumnDef::new(ScoresClassic::Status)
-                    .enumeration(
-                        super::ScoreStatus::Enum,
-                        [
-                            super::ScoreStatus::Failed,
-                            super::ScoreStatus::Passed,
-                            super::ScoreStatus::High,
-                        ],
-                    )
-                    .not_null(),
             )
             .col(
                 ColumnDef::new(ScoresClassic::Grade)
@@ -2056,6 +2013,65 @@ pub mod scores_classic {
         vec![sea_query::ForeignKey::create()
             .name(FOREIGN_KEY_SCORES_ID)
             .from(ScoresClassic::Table, ScoresClassic::Id)
+            .to(Scores::Table, Scores::Id)
+            .on_delete(ForeignKeyAction::Cascade)
+            .on_update(ForeignKeyAction::Cascade)
+            .to_owned()]
+    }
+
+    pub fn drop_foreign_keys() -> Vec<ForeignKeyDropStatement> {
+        vec![sea_query::ForeignKey::drop()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .table(ScoresClassic::Table)
+            .to_owned()]
+    }
+
+    pub fn create_indexes() -> Vec<IndexCreateStatement> {
+        vec![]
+    }
+
+    pub fn drop_indexes() -> Vec<IndexDropStatement> {
+        vec![]
+    }
+}
+
+pub mod scores_generic {
+    use sea_orm_migration::prelude::*;
+
+    use super::scores::Scores;
+
+    const FOREIGN_KEY_SCORES_ID: &str = "FK_scores_generic_scores_id";
+
+    #[derive(Iden)]
+    pub enum ScoreGeneric {
+        Table,
+        Id,
+        Mode,
+        JSON,
+    }
+
+    pub fn create() -> TableCreateStatement {
+        Table::create()
+            .table(ScoreGeneric::Table)
+            .if_not_exists()
+            .col(
+                ColumnDef::new(ScoreGeneric::Id)
+                    .big_integer()
+                    .not_null()
+                    .primary_key(),
+            )
+            .col(ColumnDef::new(ScoreGeneric::JSON).json().not_null())
+            .to_owned()
+    }
+
+    pub fn drop() -> TableDropStatement {
+        Table::drop().table(ScoreGeneric::Table).to_owned()
+    }
+
+    pub fn create_foreign_keys() -> Vec<ForeignKeyCreateStatement> {
+        vec![sea_query::ForeignKey::create()
+            .name(FOREIGN_KEY_SCORES_ID)
+            .from(ScoreGeneric::Table, ScoreGeneric::Id)
             .to(Scores::Table, Scores::Id)
             .on_delete(ForeignKeyAction::Cascade)
             .on_update(ForeignKeyAction::Cascade)
